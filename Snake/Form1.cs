@@ -12,12 +12,8 @@ namespace Snake
 {
     public partial class Form1 : Form
     {
-        int clickCount,
-            Point,
-            way = 1,
-            c,
-            x,
-            y;
+        int clickCount, Point,
+            way = 1, c, x, y;
 
         Color colorHead = Color.FromArgb(42, 42, 42);
         Color colorBody = Color.FromArgb(64, 64, 64);
@@ -37,17 +33,28 @@ namespace Snake
             dataGridView2.ColumnCount = 7;
             dataGridView2.RowCount = 7;
 
-            clearBody();
+            dataGridView1.ClearSelection();
+            dataGridView2.ClearSelection();
             fieldZeroPosition();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            dataGridView1.ClearSelection();
+            dataGridView2.ClearSelection();
         }
 
         public void clearBody()
         {
             bodyX.Clear();
             bodyY.Clear();
+            label1.Text = String.Format("Ваш счёт: 0");
+        }
+
+        public void addBody()
+        {
             bodyX.AddRange(new int[] { 16, 15, 14 });
             bodyY.AddRange(new int[] { 14, 14, 14 });
-            label1.Text = String.Format("Ваш счёт: 0");
         }
 
         public void fieldZeroPosition()
@@ -70,19 +77,25 @@ namespace Snake
             Random rand = new Random();
             int x = rand.Next(1, 28),
                 y = rand.Next(1, 28);
-            if (dataGridView1.Rows[x].Cells[y].Style.BackColor == colorMain) dataGridView1.Rows[x].Cells[y].Style.BackColor = colorApple;
+            if (dataGridView1.Rows[x].Cells[y].Style.BackColor == colorMain && x!= bodyX[0] && y!= bodyY[0])
+            {
+                dataGridView1.Rows[x].Cells[y].Style.BackColor = colorApple;
+            }
             else createApple();
         }
 
         public void gameOver()
         {
-            timer2.Enabled = false;
-            Point = 0;
-            label1.Visible = false;
             fieldZeroPosition();
             clearBody();
+            Point = 0;
+
+            timer2.Enabled = false;
+            label1.Visible = false;
             panel1.Visible = true;
             timer1.Enabled = true;
+
+            button1.Focus();
         }
 
         public void test(List<int> bodyX, List<int> bodyY)
@@ -138,7 +151,6 @@ namespace Snake
                         if (i == bodyX.Count - 1)
                         {
                             dataGridView1.Rows[bodyX[i]].Cells[bodyY[i]].Style.BackColor = colorHead;
-
                             x = bodyX[i];
                             y = bodyY[i];
                         }
@@ -153,50 +165,71 @@ namespace Snake
             }
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        protected virtual void dataGridView1_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (keyData)
+            if (timer2.Enabled == false)
+            {
+                timer2.Enabled = true;
+            }
+            switch (e.KeyCode)
             {
                 case Keys.Left:
                     bodyX.Add(x);
                     bodyY.Add(y - 1);
-                    if (bodyY[bodyY.Count - 1] == -1) bodyY[bodyY.Count - 1] = 29;
+                    if (bodyY[bodyY.Count - 1] == -1)
+                    {
+                        bodyY[bodyY.Count - 1] = 29;
+                    }
                     way = 2;
                     test(bodyX, bodyY);
                     break;
                 case Keys.Right:
                     bodyX.Add(x);
                     bodyY.Add(y + 1);
-                    if (bodyY[bodyY.Count - 1] == 30) bodyY[bodyY.Count - 1] = 0;
+                    if (bodyY[bodyY.Count - 1] == 30)
+                    {
+                        bodyY[bodyY.Count - 1] = 0;
+                    }
                     way = 4;
                     test(bodyX, bodyY);
                     break;
                 case Keys.Up:
                     bodyX.Add(x - 1);
                     bodyY.Add(y);
-                    if (bodyX[bodyX.Count - 1] == -1) bodyX[bodyX.Count - 1] = 29;
+                    if (bodyX[bodyX.Count - 1] == -1)
+                    {
+                        bodyX[bodyX.Count - 1] = 29;
+                    }
                     way = 1;
                     test(bodyX, bodyY);
                     break;
                 case Keys.Down:
                     bodyX.Add(x + 1);
                     bodyY.Add(y);
-                    if (bodyX[bodyX.Count - 1] == 30) bodyX[bodyX.Count - 1] = 0;
+                    if (bodyX[bodyX.Count - 1] == 30)
+                    {
+                        bodyX[bodyX.Count - 1] = 0;
+                    }
                     way = 3;
                     test(bodyX, bodyY);
                     break;
-                default: return base.ProcessCmdKey(ref msg, keyData);
+                case Keys.Escape:
+                    timer2.Enabled = false;
+                    break;
             }
-            return true;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            addBody();
+            way = 1;
+            moveRedraw(this.bodyX, this.bodyY, true);
+            createApple();
+            dataGridView1.Focus();
+
             label1.Visible = true;
             panel1.Visible = false;
             timer1.Enabled = false;
-            moveRedraw(this.bodyX, this.bodyY, true);
-            createApple();
             timer2.Enabled = true;
         }
 
@@ -247,7 +280,7 @@ namespace Snake
 
         private void button6_Click(object sender, EventArgs e)
         {
-            Random rand = new Random();
+            colorApple = Color.FromArgb(158, 158, 158);
             timer3.Enabled = true;
         }
 
@@ -364,7 +397,7 @@ namespace Snake
 
         private void button10_Click(object sender, EventArgs e)
         {
-
+            fieldZeroPosition();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -463,25 +496,37 @@ namespace Snake
                 case 1:
                     bodyX.Add(x - 1);
                     bodyY.Add(y);
-                    if (bodyX[bodyX.Count - 1] == -1) bodyX[bodyX.Count - 1] = 29;
+                    if (bodyX[bodyX.Count - 1] == -1)
+                    {
+                        bodyX[bodyX.Count - 1] = 29;
+                    }
                     test(bodyX, bodyY);
                     break;
                 case 2:
                     bodyX.Add(x);
                     bodyY.Add(y - 1);
-                    if (bodyY[bodyY.Count - 1] == -1) bodyY[bodyY.Count - 1] = 29;
+                    if (bodyY[bodyY.Count - 1] == -1)
+                    {
+                        bodyY[bodyY.Count - 1] = 29;
+                    }
                     test(bodyX, bodyY);
                     break;
                 case 3:
                     bodyX.Add(x + 1);
                     bodyY.Add(y);
-                    if (bodyX[bodyX.Count - 1] == 30) bodyX[bodyX.Count - 1] = 0;
+                    if (bodyX[bodyX.Count - 1] == 30)
+                    {
+                        bodyX[bodyX.Count - 1] = 0;
+                    }
                     test(bodyX, bodyY);
                     break;
                 case 4:
                     bodyX.Add(x);
                     bodyY.Add(y + 1);
-                    if (bodyY[bodyY.Count - 1] == 30) bodyY[bodyY.Count - 1] = 0;
+                    if (bodyY[bodyY.Count - 1] == 30)
+                    {
+                        bodyY[bodyY.Count - 1] = 0;
+                    }
                     test(bodyX, bodyY);
                     break;
             }
@@ -490,8 +535,8 @@ namespace Snake
         private void timer3_Tick(object sender, EventArgs e)
         {
             Random rand = new Random();
-            int head = rand.Next(0, 255);
-            int body = rand.Next(0, 255);
+            int head = rand.Next(32, 157);
+            int body = rand.Next(32, 157);
             colorHead = Color.FromArgb(head, head, head);
             colorBody = Color.FromArgb(body, body, body);
         }
