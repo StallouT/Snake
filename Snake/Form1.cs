@@ -12,8 +12,7 @@ namespace Snake
 {
     public partial class Form1 : Form
     {
-        int clickCount, Point,
-            way = 1, c, x, y;
+        int Point, way = 1, x, y;
 
         Color colorHead = Color.FromArgb(42, 42, 42);
         Color colorBody = Color.FromArgb(64, 64, 64);
@@ -30,18 +29,13 @@ namespace Snake
             dataGridView1.ColumnCount = 30;
             dataGridView1.RowCount = 30;
 
-            dataGridView2.ColumnCount = 7;
-            dataGridView2.RowCount = 7;
-
             dataGridView1.ClearSelection();
-            dataGridView2.ClearSelection();
             fieldZeroPosition();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             dataGridView1.ClearSelection();
-            dataGridView2.ClearSelection();
         }
 
         public void clearBody()
@@ -75,8 +69,8 @@ namespace Snake
         public void createApple()
         {
             Random rand = new Random();
-            int x = rand.Next(1, 28),
-                y = rand.Next(1, 28);
+            int x = rand.Next(0, 29),
+                y = rand.Next(0, 29);
             if (dataGridView1.Rows[x].Cells[y].Style.BackColor == colorMain && x!= bodyX[0] && y!= bodyY[0])
             {
                 dataGridView1.Rows[x].Cells[y].Style.BackColor = colorApple;
@@ -90,10 +84,9 @@ namespace Snake
             clearBody();
             Point = 0;
 
-            timer2.Enabled = false;
+            SnakeMove.Enabled = false;
             label1.Visible = false;
             panel1.Visible = true;
-            timer1.Enabled = true;
 
             button1.Focus();
         }
@@ -167,9 +160,9 @@ namespace Snake
 
         protected virtual void dataGridView1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (timer2.Enabled == false)
+            if (SnakeMove.Enabled == false)
             {
-                timer2.Enabled = true;
+                SnakeMove.Enabled = true;
             }
             switch (e.KeyCode)
             {
@@ -214,7 +207,7 @@ namespace Snake
                     test(bodyX, bodyY);
                     break;
                 case Keys.Escape:
-                    timer2.Enabled = false;
+                    SnakeMove.Enabled = false;
                     break;
             }
         }
@@ -229,267 +222,10 @@ namespace Snake
 
             label1.Visible = true;
             panel1.Visible = false;
-            timer1.Enabled = false;
-            timer2.Enabled = true;
-        }
+            SnakeMove.Enabled = true;
+        }         
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (clickCount == 0)
-            {
-                button1.Visible = false;
-                panel3.Visible = true;
-                panel5.Visible = true;
-                button2.Text = "Применить настройки";
-                clickCount = 1;
-            }
-            else
-            {
-                button1.Visible = true;
-                panel3.Visible = false;
-                panel5.Visible = false;
-                button2.Text = "Настройки";
-                clickCount = 0;
-            }
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            colorHead = Color.FromArgb(42, 42, 42);
-            colorBody = Color.FromArgb(64, 64, 64);
-            colorApple = Color.FromArgb(158, 158, 158);
-            timer3.Enabled = false;
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            colorHead = Color.FromArgb(0, 130, 0);
-            colorBody = Color.FromArgb(0, 200, 0);
-            colorApple = Color.FromArgb(222, 4, 3);
-            timer3.Enabled = false;
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            Random rand = new Random();
-            colorHead = Color.FromArgb(13, 13, 13);
-            colorBody = Color.FromArgb(10, 10, 10);
-            colorApple = Color.FromArgb(158, 158, 158);
-            timer3.Enabled = false;
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            colorApple = Color.FromArgb(158, 158, 158);
-            timer3.Enabled = true;
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-            fieldZeroPosition();
-            int a = 0, b = 0;
-            while (b < 29)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                b++;
-            }
-            b = 0;
-            while (a < 29)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                a++;
-            }
-            a = 29;
-            while (b < 29)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                b++;
-            }
-            a = 0;
-            while (a < 30)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                a++;
-            }
-        }
-
-        private void button8_Click(object sender, EventArgs e)
-        {
-            fieldZeroPosition();
-            int a = 0, b = 0;
-            while (b < 10)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                b++;
-            }
-            b = 20;
-            while (b < 29)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                b++;
-            }
-            b = 0;
-            while (a < 10)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                a++;
-            }
-            a = 20;
-            while (a < 29)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                a++;
-            }
-            a = 29;
-            while (b < 10)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                b++;
-            }
-            b = 20;
-            while (b < 29)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                b++;
-            }
-            a = 0;
-            while (a < 10)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                a++;
-            }
-            a = 20;
-            while (a < 30)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                a++;
-            }
-        }
-
-        private void button9_Click(object sender, EventArgs e)
-        {
-            fieldZeroPosition();
-            int a = 5, b = 5;
-            while (b < 20)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                b++;
-            }
-            b = 25;
-            while (a < 20)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                a++;
-            }
-            a = 25;
-            while (b > 10)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                b--;
-            }
-            b = 5;
-            while (a > 10)
-            {
-                dataGridView1.Rows[a].Cells[b].Style.BackColor = colorBody;
-                a--;
-            }
-        }
-
-        private void button10_Click(object sender, EventArgs e)
-        {
-            fieldZeroPosition();
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            switch (c)
-            {
-                case 1:
-                    dataGridView2.Rows[2].Cells[1].Style.BackColor = colorMain;
-                    dataGridView2.Rows[1].Cells[3].Style.BackColor = colorHead;
-                    dataGridView2.Rows[1].Cells[4].Style.BackColor = colorBody;
-                    break;
-                case 2:
-                    dataGridView2.Rows[3].Cells[1].Style.BackColor = colorMain;
-                    dataGridView2.Rows[1].Cells[2].Style.BackColor = colorHead;
-                    dataGridView2.Rows[1].Cells[3].Style.BackColor = colorBody;
-                    break;
-                case 3:
-                    dataGridView2.Rows[4].Cells[1].Style.BackColor = colorMain;
-                    dataGridView2.Rows[1].Cells[1].Style.BackColor = colorHead;
-                    dataGridView2.Rows[1].Cells[2].Style.BackColor = colorBody;
-                    break;
-                case 4:
-                    dataGridView2.Rows[5].Cells[1].Style.BackColor = colorMain;
-                    dataGridView2.Rows[2].Cells[1].Style.BackColor = colorHead;
-                    dataGridView2.Rows[1].Cells[1].Style.BackColor = colorBody;
-                    break;
-                case 5:
-                    dataGridView2.Rows[5].Cells[2].Style.BackColor = colorMain;
-                    dataGridView2.Rows[3].Cells[1].Style.BackColor = colorHead;
-                    dataGridView2.Rows[2].Cells[1].Style.BackColor = colorBody;
-                    break;
-                case 6:
-                    dataGridView2.Rows[5].Cells[3].Style.BackColor = colorMain;
-                    dataGridView2.Rows[4].Cells[1].Style.BackColor = colorHead;
-                    dataGridView2.Rows[3].Cells[1].Style.BackColor = colorBody;
-                    break;
-                case 7:
-                    dataGridView2.Rows[5].Cells[4].Style.BackColor = colorMain;
-                    dataGridView2.Rows[5].Cells[1].Style.BackColor = colorHead;
-                    dataGridView2.Rows[4].Cells[1].Style.BackColor = colorBody;
-                    break;
-                case 8:
-                    dataGridView2.Rows[5].Cells[5].Style.BackColor = colorMain;
-                    dataGridView2.Rows[5].Cells[2].Style.BackColor = colorHead;
-                    dataGridView2.Rows[5].Cells[1].Style.BackColor = colorBody;
-                    break;
-                case 9:
-                    dataGridView2.Rows[4].Cells[5].Style.BackColor = colorMain;
-                    dataGridView2.Rows[5].Cells[3].Style.BackColor = colorHead;
-                    dataGridView2.Rows[5].Cells[2].Style.BackColor = colorBody;
-                    break;
-                case 10:
-                    dataGridView2.Rows[3].Cells[5].Style.BackColor = colorMain;
-                    dataGridView2.Rows[5].Cells[4].Style.BackColor = colorHead;
-                    dataGridView2.Rows[5].Cells[3].Style.BackColor = colorBody;
-                    break;
-                case 11:
-                    dataGridView2.Rows[2].Cells[5].Style.BackColor = colorMain;
-                    dataGridView2.Rows[5].Cells[5].Style.BackColor = colorHead;
-                    dataGridView2.Rows[5].Cells[4].Style.BackColor = colorBody;
-                    break;
-                case 12:
-                    dataGridView2.Rows[1].Cells[5].Style.BackColor = colorMain;
-                    dataGridView2.Rows[4].Cells[5].Style.BackColor = colorHead;
-                    dataGridView2.Rows[5].Cells[5].Style.BackColor = colorBody;
-                    break;
-                case 13:
-                    dataGridView2.Rows[1].Cells[4].Style.BackColor = colorMain;
-                    dataGridView2.Rows[3].Cells[5].Style.BackColor = colorHead;
-                    dataGridView2.Rows[4].Cells[5].Style.BackColor = colorBody;
-                    break;
-                case 14:
-                    dataGridView2.Rows[1].Cells[3].Style.BackColor = colorMain;
-                    dataGridView2.Rows[2].Cells[5].Style.BackColor = colorHead;
-                    dataGridView2.Rows[3].Cells[5].Style.BackColor = colorBody;
-                    break;
-                case 15:
-                    dataGridView2.Rows[1].Cells[2].Style.BackColor = colorMain;
-                    dataGridView2.Rows[1].Cells[5].Style.BackColor = colorHead;
-                    dataGridView2.Rows[2].Cells[5].Style.BackColor = colorBody;
-                    break;
-                case 16:
-                    dataGridView2.Rows[1].Cells[1].Style.BackColor = colorMain;
-                    dataGridView2.Rows[1].Cells[4].Style.BackColor = colorHead;
-                    dataGridView2.Rows[1].Cells[5].Style.BackColor = colorBody;
-                    c = 0;
-                    break;
-            }
-            c++;
-        }
-
-        private void timer2_Tick(object sender, EventArgs e)
+        private void SnakeMove_Tick(object sender, EventArgs e)
         {
             switch (way)
             {
@@ -530,15 +266,6 @@ namespace Snake
                     test(bodyX, bodyY);
                     break;
             }
-        }
-
-        private void timer3_Tick(object sender, EventArgs e)
-        {
-            Random rand = new Random();
-            int head = rand.Next(32, 157);
-            int body = rand.Next(32, 157);
-            colorHead = Color.FromArgb(head, head, head);
-            colorBody = Color.FromArgb(body, body, body);
         }
     }
 }
